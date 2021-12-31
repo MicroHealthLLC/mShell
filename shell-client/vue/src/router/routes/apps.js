@@ -4,6 +4,11 @@ export default [
     name: 'apps-calendar',
     component: () => import('@/views/apps/calendar/Calendar.vue'),
   },
+  {
+    path: '/apps/ec2',
+    name: 'ec2-server',
+    component: () => import('@/views/apps/servers/ec2/ec2-server.vue'),
+  },
 
   // *===============================================---*
   // *--------- EMAIL & IT'S FILTERS N LABELS -------------------------------*

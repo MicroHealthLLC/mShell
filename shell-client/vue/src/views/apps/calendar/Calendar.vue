@@ -42,8 +42,8 @@
 
 <script>
 import FullCalendar from '@fullcalendar/vue'
-import store from '@/store'
 import { onUnmounted } from '@vue/composition-api'
+import store from '@/store'
 import calendarStoreModule from './calendarStoreModule'
 import CalendarSidebar from './calendar-sidebar/CalendarSidebar.vue'
 import CalendarEventHandler from './calendar-event-handler/CalendarEventHandler.vue'

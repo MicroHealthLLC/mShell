@@ -251,7 +251,6 @@
 </template>
 
 <script>
-import store from '@/store'
 import {
   ref, onUnmounted, computed, watch,
   // ref, watch, computed, onUnmounted,
@@ -264,6 +263,7 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import { filterTags, formatDateToMonthShort } from '@core/utils/filter'
 import { useRouter } from '@core/utils/utils'
 import { useResponsiveAppLeftSidebarVisibility } from '@core/comp-functions/ui/app'
+import store from '@/store'
 import EmailLeftSidebar from './EmailLeftSidebar.vue'
 import EmailView from './EmailView.vue'
 import emailStoreModule from './emailStoreModule'

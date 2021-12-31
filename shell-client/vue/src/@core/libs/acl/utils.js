@@ -1,4 +1,4 @@
-import { getCurrentInstance } from '@vue/composition-api'
+// import { getCurrentInstance } from '@vue/composition-api'
 
 /**
  * Returns ability result if ACL is configured or else just return true
@@ -7,10 +7,13 @@ import { getCurrentInstance } from '@vue/composition-api'
  * @param {String} action CASL Actions // https://casl.js.org/v4/en/guide/intro#basics
  * @param {String} subject CASL Subject // https://casl.js.org/v4/en/guide/intro#basics
  */
-export const can = (action, subject) => {
-  const vm = getCurrentInstance().proxy
-  return vm.$can ? vm.$can(action, subject) : true
-}
+// export const can = (action, subject) => {
+//   return true
+//   const vm = getCurrentInstance().proxy
+//   return vm.$can ? vm.$can(action, subject) : true
+// }
+
+export const can = () => true
 
 /**
  * Check if user can view item based on it's ability

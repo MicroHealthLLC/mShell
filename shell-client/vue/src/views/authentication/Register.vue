@@ -7,7 +7,7 @@
         <b-link class="brand-logo">
           <vuexy-logo />
           <h2 class="brand-text text-primary ml-1">
-            Vuexy
+            mShell
           </h2>
         </b-link>
 
@@ -15,7 +15,7 @@
           Adventure starts here 🚀
         </b-card-title>
         <b-card-text class="mb-2">
-          Make your app management easy and fun!
+          Make your server management easy and fun!
         </b-card-text>
 
         <!-- form -->
@@ -74,7 +74,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="Password"
-                rules="required"
+                rules="required|min:8"
               >
                 <b-input-group
                   class="input-group-merge"
@@ -126,7 +126,7 @@
 
         <b-card-text class="text-center mt-2">
           <span>Already have an account? </span>
-          <b-link :to="{name:'auth-login-v1'}">
+          <b-link :to="{name:'auth-login'}">
             <span>Sign in instead</span>
           </b-link>
         </b-card-text>
@@ -181,6 +181,8 @@ import VuexyLogo from '@core/layouts/components/Logo.vue'
 import { required, email } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import useJwt from '@/auth/jwt/useJwt'
+import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
 export default {
   components: {
@@ -223,13 +225,34 @@ export default {
     validationForm() {
       this.$refs.registerForm.validate().then(success => {
         if (success) {
-          this.$toast({
-            component: ToastificationContent,
-            props: {
-              title: 'Form Submitted',
-              icon: 'EditIcon',
-              variant: 'success',
-            },
+          useJwt.register({
+            name: this.username,
+            email: this.regEmail,
+            password: this.password,
+          }).then(response => {
+            const user = response.data
+            useJwt.setToken(response.data.tokens.access.token)
+            useJwt.setRefreshToken(response.data.tokens.refresh.token)
+            user.user.fullName = user.user.name
+            localStorage.setItem('userData', JSON.stringify(user))
+
+            // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
+            this.$router.replace(getHomeRouteForLoggedInUser(user.role))
+              .then(() => {
+                this.$toast({
+                  component: ToastificationContent,
+                  position: 'top-right',
+                  props: {
+                    title: `Welcome ${user.user.name}`,
+                    icon: 'CoffeeIcon',
+                    variant: 'success',
+                    text: `You have successfully logged in as ${user.user.fullName}. Now you can start to explore!`,
+                  },
+                })
+              })
+              .catch(error => {
+                this.$refs.loginForm.setErrors(error.response.data.error)
+              })
           })
         }
       })

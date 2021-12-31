@@ -44,6 +44,10 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    serverConfig: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'ServerConfig',
+    },
   },
   {
     timestamps: true,

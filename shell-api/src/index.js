@@ -1,15 +1,26 @@
 const mongoose = require('mongoose');
+const http = require('http');
 const app = require('./app');
 const config = require('./config/config');
 const logger = require('./config/logger');
 
-let server;
+const server = http.createServer(app);
+
 mongoose.connect(config.mongoose.url, config.mongoose.options).then(() => {
   logger.info('Connected to MongoDB');
-  server = app.listen(config.port, () => {
+  server.listen(config.port, () => {
     logger.info(`Listening to port ${config.port}`);
   });
 });
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: 'http://localhost:8081',
+    methods: ['GET', 'POST'],
+  },
+});
+
+app.set('_io', io);
 
 const exitHandler = () => {
   if (server) {
@@ -36,3 +47,7 @@ process.on('SIGTERM', () => {
     server.close();
   }
 });
+
+module.exports = {
+  server,
+};

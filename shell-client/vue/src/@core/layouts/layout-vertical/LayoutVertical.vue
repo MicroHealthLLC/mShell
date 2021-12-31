@@ -70,14 +70,14 @@
     <!--/ Content -->
 
     <!-- Footer -->
-    <footer
-      class="footer footer-light"
-      :class="[footerTypeClass]"
-    >
-      <slot name="footer">
-        <app-footer />
-      </slot>
-    </footer>
+    <!--    <footer-->
+    <!--      class="footer footer-light"-->
+    <!--      :class="[footerTypeClass]"-->
+    <!--    >-->
+    <!--      <slot name="footer">-->
+    <!--        <app-footer />-->
+    <!--      </slot>-->
+    <!--    </footer>-->
     <!-- /Footer -->
 
     <slot name="customizer" />
@@ -87,7 +87,7 @@
 <script>
 import { onUnmounted } from '@vue/composition-api'
 import AppNavbarVerticalLayout from '@core/layouts/components/app-navbar/AppNavbarVerticalLayout.vue'
-import AppFooter from '@core/layouts/components/AppFooter.vue'
+// import AppFooter from '@core/layouts/components/AppFooter.vue'
 import useAppConfig from '@core/app-config/useAppConfig'
 import { BNavbar } from 'bootstrap-vue'
 import LayoutContentRendererDefault from '@core/layouts/components/layout-content-renderer/LayoutContentRendererDefault.vue'
@@ -101,7 +101,7 @@ export default {
   components: {
     // AppBreadcrumb,
     AppNavbarVerticalLayout,
-    AppFooter,
+    // AppFooter,
     VerticalNavMenu,
     BNavbar,
     LayoutContentRendererLeftDetached,

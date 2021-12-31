@@ -8,12 +8,12 @@
           <vuexy-logo />
 
           <h2 class="brand-text text-primary ml-1">
-            Vuexy
+            mShell
           </h2>
         </b-link>
 
         <b-card-title class="mb-1">
-          Welcome to Vuexy! 👋
+          Welcome to mShell! 👋
         </b-card-title>
         <b-card-text class="mb-2">
           Please sign-in to your account and start the adventure
@@ -26,7 +26,7 @@
         >
           <b-form
             class="auth-login-form mt-2"
-            @submit.prevent
+            @submit.prevent="submitLogin"
           >
 
             <!-- email -->
@@ -55,7 +55,7 @@
             <b-form-group>
               <div class="d-flex justify-content-between">
                 <label for="password">Password</label>
-                <b-link :to="{name:'auth-forgot-password-v1'}">
+                <b-link :to="{name:'auth-forgot-password'}">
                   <small>Forgot Password?</small>
                 </b-link>
               </div>
@@ -70,7 +70,7 @@
                 >
                   <b-form-input
                     id="password"
-                    v-model="password"
+                    v-model="userPassword"
                     :type="passwordFieldType"
                     class="form-control-merge"
                     :state="errors.length > 0 ? false:null"
@@ -115,7 +115,7 @@
 
         <b-card-text class="text-center mt-2">
           <span>New on our platform? </span>
-          <b-link :to="{name:'auth-register-v1'}">
+          <b-link :to="{name:'auth-register'}">
             <span>Create an account</span>
           </b-link>
         </b-card-text>
@@ -162,11 +162,24 @@
 <script>
 import { ValidationProvider, ValidationObserver } from 'vee-validate'
 import {
-  BButton, BForm, BFormInput, BFormGroup, BCard, BLink, BCardTitle, BCardText, BInputGroup, BInputGroupAppend, BFormCheckbox,
+  BButton,
+  BForm,
+  BFormInput,
+  BFormGroup,
+  BCard,
+  BLink,
+  BCardTitle,
+  BCardText,
+  BInputGroup,
+  BInputGroupAppend,
+  BFormCheckbox,
 } from 'bootstrap-vue'
 import VuexyLogo from '@core/layouts/components/Logo.vue'
-import { required, email } from '@validations'
+import { required, email, password } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
+import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import useJwt from '@/auth/jwt/useJwt'
+import { getHomeRouteForLoggedInUser } from '@/auth/utils'
 
 export default {
   components: {
@@ -190,16 +203,54 @@ export default {
   data() {
     return {
       userEmail: '',
-      password: '',
+      userPassword: '',
       status: '',
       // validation rules
       required,
       email,
+      password,
     }
   },
   computed: {
     passwordToggleIcon() {
       return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
+    },
+  },
+  methods: {
+    submitLogin() {
+      this.$refs.loginForm.validate().then(success => {
+        if (success) {
+          useJwt.login({
+            email: this.userEmail,
+            password: this.userPassword,
+          })
+            .then(response => {
+              const user = response.data
+              useJwt.setToken(response.data.tokens.access.token)
+              useJwt.setRefreshToken(response.data.tokens.refresh.token)
+              user.user.fullName = user.user.name
+              localStorage.setItem('userData', JSON.stringify(user))
+
+              // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
+              this.$router.replace(getHomeRouteForLoggedInUser(user.role))
+                .then(() => {
+                  this.$toast({
+                    component: ToastificationContent,
+                    position: 'top-right',
+                    props: {
+                      title: `Welcome ${user.user.name}`,
+                      icon: 'CoffeeIcon',
+                      variant: 'success',
+                      text: `You have successfully logged in as ${user.user.role}. Now you can start to explore!`,
+                    },
+                  })
+                })
+                .catch(error => {
+                  this.$refs.loginForm.setErrors(error.response.data.error)
+                })
+            })
+        }
+      })
     },
   },
 }

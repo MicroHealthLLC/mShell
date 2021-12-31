@@ -186,12 +186,12 @@
 
 <script>
 import { useRouter } from '@core/utils/utils'
-import store from '@/store'
 import { ref } from '@vue/composition-api'
 import {
   BCard, BCardBody, BRow, BCol, BImg, BCardText, BLink, BButton, BDropdown, BDropdownItem, BAlert,
 } from 'bootstrap-vue'
 import Ripple from 'vue-ripple-directive'
+import store from '@/store'
 import ECommerceProductDetailsItemFeatures from './ECommerceProductDetailsItemFeatures.vue'
 import ECommerceProductDetailsRelatedProducts from './ECommerceProductDetailsRelatedProducts.vue'
 import { useEcommerceUi } from '../useEcommerce'

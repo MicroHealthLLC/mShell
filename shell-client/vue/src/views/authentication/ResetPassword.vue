@@ -9,7 +9,7 @@
           <vuexy-logo />
 
           <h2 class="brand-text text-primary ml-1">
-            Vuexy
+            mShell
           </h2>
         </b-link>
 
@@ -37,7 +37,7 @@
                 #default="{ errors }"
                 name="Password"
                 vid="Password"
-                rules="required|password"
+                rules="required|password|min:8"
               >
                 <b-input-group
                   class="input-group-merge"
@@ -72,7 +72,7 @@
               <validation-provider
                 #default="{ errors }"
                 name="Confirm Password"
-                rules="required|confirmed:Password"
+                rules="required|confirmed:Password|min:8"
               >
                 <b-input-group
                   class="input-group-merge"
@@ -179,6 +179,7 @@ export default {
     validationForm() {
       this.$refs.simpleRules.validate().then(success => {
         if (success) {
+          this.$http.post('auth/reset-password', { password: this.password }, { params: { token: window.location.search.split('=')[1] } })
           this.$toast({
             component: ToastificationContent,
             props: {
@@ -187,6 +188,7 @@ export default {
               variant: 'success',
             },
           })
+          this.$router.replace('auth-login')
         }
       })
     },

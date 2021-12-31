@@ -9,7 +9,7 @@
           <vuexy-logo />
 
           <h2 class="brand-text text-primary ml-1">
-            Vuexy
+            mShell
           </h2>
         </b-link>
 
@@ -59,7 +59,7 @@
         </validation-observer>
 
         <b-card-text class="text-center mt-2">
-          <b-link :to="{name:'auth-login-v1'}">
+          <b-link :to="{name:'auth-login'}">
             <feather-icon icon="ChevronLeftIcon" /> Back to login
           </b-link>
         </b-card-text>
@@ -104,7 +104,8 @@ export default {
     validationForm() {
       this.$refs.simpleRules.validate().then(success => {
         if (success) {
-          this.$router.push({ name: 'auth-reset-password-v1' })
+          this.$http.post('auth/forgot-password', { email: this.userEmail })
+          this.$router.push({ name: 'auth-reset-password' })
         }
       })
     },

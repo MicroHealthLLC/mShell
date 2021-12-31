@@ -172,7 +172,6 @@
 </template>
 
 <script>
-import store from '@/store'
 import {
   ref, watch, computed, onUnmounted,
 } from '@vue/composition-api'
@@ -185,6 +184,7 @@ import draggable from 'vuedraggable'
 import { formatDate, avatarText } from '@core/utils/filter'
 import { useRouter } from '@core/utils/utils'
 import { useResponsiveAppLeftSidebarVisibility } from '@core/comp-functions/ui/app'
+import store from '@/store'
 import TodoLeftSidebar from './TodoLeftSidebar.vue'
 import todoStoreModule from './todoStoreModule'
 import TodoTaskHandlerSidebar from './TodoTaskHandlerSidebar.vue'
