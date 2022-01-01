@@ -33,29 +33,11 @@ const router = new VueRouter({
   ],
 })
 
-// router.beforeEach((to, _, next) => {
-//   const isLoggedIn = isUserLoggedIn()
-//
-//   if (!canNavigate(to)) {
-//     // Redirect to login if not logged in
-//     if (!isLoggedIn) return next({ name: 'auth-login' })
-//
-//     // If logged in => not authorized
-//     return next({ name: 'misc-not-authorized' })
-//   }
-//
-//   if (to.meta.redirectIfLoggedIn && isLoggedIn) {
-//     const userData = getUserData()
-//     next(getHomeRouteForLoggedInUser(userData ? userData.role : null))
-//   }
-//
-//   return next()
-// })
-
 router.beforeEach((to, _, next) => {
   const isLoggedIn = isUserLoggedIn()
+  const authRoutes = ['auth-register', 'auth-login']
 
-  if (!isLoggedIn && to.name !== 'auth-login') {
+  if (!isLoggedIn && !authRoutes.includes(to.name)) {
     // Redirect to login if not logged in
     return next({ name: 'auth-login' })
   }
