@@ -1,4 +1,6 @@
+# theme
 .DS_Store
+vuexy_theme
 
 # local env files
 .env.local
